@@ -1,26 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-  feature/search-and-validation
     const productList = document.getElementById('product-list');
-    const searchInput = document.getElementById('search');  // ให้ตรงกับ id ใน index.html
-    const loader = document.getElementById('loader');       // สำหรับ loading state
+    const searchInput = document.getElementById('search');
+    const loader = document.getElementById('loader');
     let allProducts = [];
 
-    // แสดง Loader
     function showLoader() {
         loader.style.display = 'block';
     }
 
-    // ซ่อน Loader
     function hideLoader() {
         loader.style.display = 'none';
     }
 
-    // แปลงราคาด้วย comma เช่น 12600 → 12,600
     function formatPrice(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    // สร้างและแสดงสินค้าในหน้าเว็บ
     function displayProducts(products) {
         productList.innerHTML = '';
         products.forEach(product => {
@@ -35,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ดึงข้อมูลสินค้า
     async function fetchProducts() {
         showLoader();
         try {
@@ -50,59 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Event ค้นหา
     searchInput.addEventListener('keyup', () => {
-        const searchTerm = searchInput.value.trim().toLowerCase(); // ✅ trim เพื่อลบช่องว่างหน้า-หลัง
-
+        const searchTerm = searchInput.value.trim().toLowerCase();
         if (searchTerm === "") {
-            displayProducts(allProducts);  // ✅ ถ้าเว้นว่าง → แสดงสินค้าทั้งหมด
+            displayProducts(allProducts);
             return;
         }
-
         const filtered = allProducts.filter(product =>
             product.name.toLowerCase().includes(searchTerm)
         );
         displayProducts(filtered);
     });
 
-    fetchProducts();  // เริ่มต้นโหลดสินค้า
+    fetchProducts();
 });
-
-  const loader = document.getElementById('loader');
-  const productList = document.getElementById('product-list');
-  const searchInput = document.getElementById('searchInput');
-  let allProducts = [];
-
-  loader.style.display = 'block'; // แสดง loader
-
-  fetch('js/products.json')
-    .then(response => response.json())
-    .then(data => {
-      allProducts = data;
-      displayProducts(allProducts);
-      loader.style.display = 'none'; // ซ่อน loader เมื่อโหลดเสร็จ
-    });
-
-  function displayProducts(products) {
-    productList.innerHTML = '';
-    products.forEach(product => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.innerHTML = 
-        <img src="${product.image}" alt="${product.name}">
-        <h3>${product.name}</h3>
-        <p>ราคา: ${product.price.toLocaleString()} บาท</p>
-      ;
-      productList.appendChild(card);
-    });
-  }
-
-  searchInput.addEventListener('keyup', () => {
-    const searchTerm = searchInput.value.toLowerCase();
-    const filtered = allProducts.filter(product =>
-      product.name.toLowerCase().includes(searchTerm)
-    );
-    displayProducts(filtered);
-  });
-});
- main
